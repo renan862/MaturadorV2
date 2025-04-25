@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="pt-br" class="dark">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Dashboard WhatsApp</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="/socket.io/socket.io.js"></script>
+</head>
+<body class="bg-gray-900 text-white min-h-screen p-8 font-sans">
+  
+  <!-- Relógio no canto superior direito -->
+  <div id="clock" class="absolute top-8 right-8 text-white text-4xl font-semibold p-4 rounded-lg shadow-lg bg-gradient-to-r from-blue-500 via-purple-500 to-pink-500">
+    <!-- O relógio será exibido aqui -->
+  </div>
+  
+  <div class="container mx-auto flex justify-between gap-8">
+    <!-- Seção Esquerda (Metade da tela para cada seção com seus botões) -->
+    <div class="w-1/2">
+      <!-- Seção de Gerenciamento de Sessões -->
+      <section id="sessions" class="mb-8">
+        <h2 class="text-2xl font-semibold mb-4 text-gray-200">Gerenciar Sessões:</h2>
+        <div class="flex flex-col gap-4 mb-6">
+          <div class="flex items-center gap-4">
+            <input type="text" id="session-input" placeholder="Nome da Sessão"
+              class="bg-gray-800 text-white p-3 rounded-md w-80 border border-gray-600 focus:outline-none focus:ring-2 focus:ring-indigo-500" />
+            <button id="create-session" class="bg-green-600 hover:bg-green-700 px-6 py-3 rounded-md text-lg font-semibold transition duration-300 ease-in-out">Criar Sessão</button>
+          </div>
+
+          <ul id="session-list" class="space-y-3"></ul>
+        </div>
+      </section>
+
+      <!-- Seção de QR Codes -->
+      <section id="qrcodes" class="mb-8">
+        <h2 class="text-2xl font-semibold mb-4 text-gray-200">QR Codes:</h2>
+        <div id="qr-container" class="grid grid-cols-3 gap-6">
+          <!-- Os QR codes serão inseridos aqui -->
+        </div>
+      </section>
+    </div>
+
+    <!-- Painel de Ações à Direita -->
+    <div class="w-1/2 bg-gray-800 p-6 rounded-lg shadow-lg">
+      <h3 class="text-2xl font-semibold text-center text-gray-200 mb-6">Painel de Ações</h3>
+
+      <!-- Ações para todas as Sessões -->
+      <div class="flex flex-col gap-4">
+        <button id="save-repeat" onclick="saveAll()" class="bg-purple-600 hover:bg-purple-700 px-6 py-3 rounded-md text-lg font-semibold transition duration-300 ease-in-out w-full">Salvar para Todas</button>
+        <button id="send-all" class="bg-blue-600 hover:bg-blue-700 px-6 py-3 rounded-md text-lg font-semibold transition duration-300 ease-in-out w-full">Enviar para Todas</button>
+        <button id="stop-all" class="bg-yellow-600 hover:bg-yellow-700 px-6 py-3 rounded-md text-lg font-semibold transition duration-300 ease-in-out w-full">Parar Todas</button>
+        <button id="restart-all" class="bg-orange-600 hover:bg-orange-700 px-6 py-3 rounded-md text-lg font-semibold transition duration-300 ease-in-out w-full">Reiniciar Todas</button>
+
+        <!-- Seção de Envio em Massa -->
+        <section class="mb-8">
+          <h2 class="text-2xl font-semibold mb-4 text-gray-200">Envio em Massa:</h2>
+          <div class="flex flex-col gap-4 mb-6">
+            <div class="flex items-center gap-2">
+              <label for="time-min" class="text-1x1 text-gray-300">Tempo Minimo (segundos)</label>
+              <input type="number" id="time-min" min="1" value="1" class="bg-gray-800 text-white p-3 w-32 rounded-md border border-gray-600 focus:outline-none focus:ring-2 focus:ring-indigo-500" />
+            
+              <label for="time-max" class="text-1x1 text-gray-300">Tempo Máximo (segundos)</label>
+              <input type="number" id="time-max" min="1" value="1" class="bg-gray-800 text-white p-3 w-32 rounded-md border border-gray-600 focus:outline-none focus:ring-2 focus:ring-indigo-500" />
+            </div>
+            <div class="flex items-center gap-2">
+              <label for="repeat-count" class="text-1x1 text-gray-300">Repetições por número</label>
+              <input type="number" id="repeat-count" min="1" class="bg-gray-800 text-white p-3 w-32 rounded-md border border-gray-600 focus:outline-none focus:ring-2 focus:ring-indigo-500" />
+            </div>
+          </div>
+        </section>
+      </div>
+    </div>
+  </div>
+
+  <!-- Seção de Logs -->
+  <section id="logs" class="mb-8">
+    <h2 class="text-2xl font-semibold mb-4 text-gray-200">📡 Mensagens Enviadas:</h2>
+    <ul id="log-messages" class="text-sm text-gray-300 space-y-2">
+      <!-- Logs das mensagens enviadas -->
+    </ul>
+  </section>
+
+  <script src="script.js"></script>
+</body>
+</html>
